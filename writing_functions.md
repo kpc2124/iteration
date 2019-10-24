@@ -110,3 +110,40 @@ mean_and_sd(input_x = x)
     ## [26] -0.149966223 -0.257816586 -1.680744021 -0.606639531  0.363029790
 
 ## Multiple inputs
+
+``` r
+sim_data = tibble(
+  x = rnorm(30, mean = 1, sd = 1),
+  y = 2 + 3 * x + rnorm(30, 0, 1)
+)
+
+ls_fit = lm(y ~ x, data = sim_data) ## fits simple linear regreession
+  
+beta0_hat = coef(ls_fit)[1] ## extract estimated intercept
+beta1_hat = coef(ls_fit)[2] ## estimated slope
+```
+
+``` r
+sim_regression = function(n, beta0, beta1) {
+  
+  sim_data = tibble(
+    x = rnorm(n, mean = 1, sd = 1),
+    y = beta0 + beta1 * x + rnorm(n, 0, 1)
+    )
+
+  ls_fit = lm(y ~ x, data = sim_data)
+  
+  tibble(
+    beta0_hat = coef(ls_fit)[1],
+    beta1_hat = coef(ls_fit)[2]
+  )
+  
+}
+
+sim_regression(n = 3000, beta0 = 17, beta1 = -3)
+```
+
+    ## # A tibble: 1 x 2
+    ##   beta0_hat beta1_hat
+    ##       <dbl>     <dbl>
+    ## 1      17.0     -2.99
